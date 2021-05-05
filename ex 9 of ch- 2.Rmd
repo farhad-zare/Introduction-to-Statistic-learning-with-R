@@ -1,0 +1,61 @@
+---
+title: "ex 9 of ch 2"
+output: html_document
+---
+
+Which of the predictors are quantitative, and which are qualitative?
+
+```{r}
+library(ISLR)
+data(Auto)
+summary(Auto)
+```
+Which of the predictors are quantitative, and which are qualitative?
+```{r}
+lapply(Auto, class)
+```
+The column name is the only not numeric, therefore it is a qualitative. Also reading the data set information ?Auto, it is seen that the origin column is qualitative, factors described as numbers. The other columns are all quantitatives.
+```{r}
+origin <- as.factor(Auto$origin)
+```
+
+
+What is the range of each quantitative predictor? You can answer
+this using the range() function.
+```{r}
+cols.qlt = names(Auto) %in% c("name", "origin")
+lapply(Auto[, !cols.qlt], range)
+```
+What is the mean and standard deviation of each quantitative
+predictor?
+
+```{r}
+lapply(Auto[, !cols.qlt], function(x){ c('mean'=mean(x), 'sd'=sd(x))})
+```
+d) Now remove the 10th through 85th observations. What is the range, mean, and standard deviation of each predictor in the subset of the data that remains?
+```{r}
+lapply(Auto[-(10:85), !cols.qlt], function(x){ c('mean'=mean(x), 'sd'=sd(x))})
+```
+e) Using the full data set, investigate the predictors graphically, using scatterplots or other tools of your choice. Create some plots highlighting the relationships among the predictors. Comment on your findings.
+```{r}
+pairs(Auto[, !cols.qlt])
+```
+Perceiving the graph, it is noticed many tends, some instances are mpg x cylinders, horsepower x weight, mpg x weight and displacement x acceleration. Visualize it closer.
+
+```{r}
+par(mfrow=c(2,2))
+
+plot(Auto$displacement,Auto$acceleration)
+plot(Auto$weight, Auto$horsepower)
+plot(Auto$cylinders, Auto$mpg)
+plot(Auto$weight, Auto$mpg)
+```
+There is a linear tendency in all four graphs: mpg tends to decrease as cylinders or weight increases, whereas horsepower increases as weight increases, and acceleration and displacement have a negative correlation.
+
+f) Suppose that we wish to predict gas mileage (mpg) on the basis of the other variables. Do your plots suggest that any of the other variables might be useful in predicting mpg? Justify your answer.
+```{r}
+par(mfrow=c(3,2))
+for (i in 2:7){
+  plot(Auto$mpg, Auto[,i], xlab="mpg" , ylab = names(Auto)[i])}
+```
+

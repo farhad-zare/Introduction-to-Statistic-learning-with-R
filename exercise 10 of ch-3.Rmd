@@ -1,0 +1,85 @@
+---
+title: "exercise 10 of ch-3"
+output: html_document
+---
+a) Fit a multiple regression model to predict Sales using Price,
+Urban, and US.
+```{r}
+library("ISLR")
+data("Carseats")
+head(Carseats)
+lm1<-lm(Sales~Price*Urban*US,data=Carseats)
+summary(lm1)
+```
+```{r}
+lm2<-lm(Sales~Price+Urban+US, data = Carseats)
+summary(lm2)
+```
+```{r}
+lm3<-lm(Sales~Price+Urban+US+Urban:US+Price:US+Price:Urban, data = Carseats)
+summary(lm3)
+```
+```{r}
+lm4<-lm(Sales~Price+Urban+US+Urban:US, data = Carseats)
+summary(lm4)
+#sales~Price+Us are significant.
+```
+
+
+b) Provide an interpretation of each coefficient in the model. Be careful—some of the variables in the model are qualitative!
+
+When price increases by 1 dollar and other predictors are held constant, sales decrease by 54.459 unit sales. In otherwords, when price increases by 1 dollar, the number of carseats sold decrease by 54,459.
+
+A store’s sale is not affected by whether or not it is in a Urban area.
+
+A store in the US sales 1200 more carseats (in average) than a store that is abroad.
+
+
+
+c) Write out the model in equation form, being careful to handle
+the qualitative variables properly.
+
+$$
+Sales_i=\beta_0+\beta_1\times Price_i+\beta_2 \times US_i+\epsilon_i
+$$
+
+
+
+d) For which of the predictors can you reject the null hypothesis Ho : βj = 0?
+
+The predictor ‘Urban’. Its p-value is not statistically significant with a value of 0.936.
+
+
+
+e) On the basis of your response to the previous question, fit a
+smaller model that only uses the predictors for which there is
+evidence of association with the outcome.
+
+```{r}
+lm.fit<-lm(Sales~Price+US, data=Carseats)
+summary(lm.fit)
+```
+
+
+
+f) How well do the models in (a) and (e) fit the data?
+
+R squared and adjusted R squared suggest that the model is not fitting the data well but is still significantly better than only including the intercept.
+
+
+
+g) Using the model from (e), obtain 95 % confidence intervals for the coefficient(s).
+```{r}
+confint(lm.fit)
+```
+
+
+h) Is there evidence of outliers or high leverage observations in the model from (e)? 
+
+ Based on the Normal.q-q pot and the Residuals vs Leverage plot, there are no evidence of such points.
+
+```{r}
+{par(mfrow=c(2,2))
+plot(lm.fit)}
+```
+

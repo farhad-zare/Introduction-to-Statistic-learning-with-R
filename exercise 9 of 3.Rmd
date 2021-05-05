@@ -1,0 +1,75 @@
+---
+title: "chapter3 ex-9"
+output: html_document
+---
+a) Produce a scatterplot matrix which includes all of the variables
+in the data set.
+```{r}
+library("ISLR")
+data(Auto)
+pairs(Auto)
+```
+
+b) Compute the matrix of correlations between the variables using the function cor(). You will need to exclude the name variable, which is qualitative.
+```{r}
+cor(Auto[, names(Auto) !="name"])
+
+```
+
+c) Use the lm() function to perform a multiple linear regression with mpg as the response and all other variables except name as the predictors. Use the summary() function to print the results. Comment on the output. For instance:
+```{r}
+model = lm(mpg ~. -name, data = Auto)
+summary(model)
+```
+i. Is there a relationship between the predictors and the response? Yes, there is. However, some predictors do not have a statistically significant effect on the response. R-squared value implies that 82% of the changes in the response can be explained by the predictors in this regression model.
+
+ii. Which predictors appear to have a statistically significant relationship to the response? displacement, weight, year, origin .
+
+iii. What does the coefficient for the year variable suggest? When every other predictor held constant, the mpg value increases with each year that passes. Specifically, mpg increase by 1.43 each year.
+
+
+
+
+d) Use the plot() function to produce diagnostic plots of the linear regression fit. Comment on any problems you see with the fit. Do the residual plots suggest any unusually large outliers? Does the leverage plot identify any observations with unusually high leverage?
+```{r}
+{par(mfrow = c(2,2))
+plot(model)}
+```
+
+
+
+1-The first graph shows that there is a non-linear relationship between the responce and the predictors;
+
+2-The second graph shows that the residuals are normally distributed and right skewed;
+
+3-The third graph shows that the constant variance of error assumption is not true for this model;
+
+4-The Third graphs shows that there are no leverage points. However, there on observation that stands out as a potential leverage point (labeled 14 on the graph)
+
+
+
+e) Use the * and : symbols to fit linear regression models with
+interaction effects. Do any interactions appear to be statistically
+significant?
+
+Note that when specifying formulas, the * operator gives the multiplicative term as well as the first order terms, and
+the : operator just gives the multiplicative term. This means that
+$$
+lm(Y ~ a*b)\\
+lm(Y ~ a + b + a:b)
+$$
+would give the same result.
+```{r}
+my_lm_e = lm(mpg ~ . - name + weight:acceleration,data=Auto)
+summary(my_lm_e)
+```
+f) Try a few different transformations of the variables, such as log(X),√x, x^2,  etc. Comment on your
+findings.
+
+
+```{r}
+my_lm_new = lm(mpg ~ . - name + log(weight) + sqrt(horsepower) + I(displacement^2) +
+I(cylinders^2),data=Auto)
+summary(my_lm_new)
+```
+
