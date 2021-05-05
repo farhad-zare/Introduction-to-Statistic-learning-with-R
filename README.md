@@ -1,1 +1,1 @@
-# Introduction-to-Statistic-learning-with-R
+# Introduction-to-Statistic-learning-with-R-ch-2 and 3
